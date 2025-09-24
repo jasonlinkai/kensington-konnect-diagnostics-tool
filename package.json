@@ -36,15 +36,15 @@
     "create-pkg": "node scripts/create-pkg.js",
     "sign-pkg": "node scripts/sign-pkg.js",
     "notarize-pkg": "node scripts/notarize-pkg.js",
-    "package-mac-x64": "rimraf dist && npm run rebuild-usb-detection-x64 && npm run build-mac-x64 && npm run sign-mac -- x64 && npm run notarize-mac -- x64 && npm run create-pkg -- x64 && npm run sign-pkg -- x64 && npm run notarize-pkg -- x64 && node scripts/zip-and-move.js",
-    "package-mac-arm64": "rimraf dist && npm run rebuild-usb-detection-arm64 && npm run build-mac-arm64 && npm run sign-mac -- arm64 && npm run notarize-mac -- arm64 && npm run create-pkg -- arm64 && npm run sign-pkg -- arm64 && npm run notarize-pkg -- arm64 && node scripts/zip-and-move.js",
+    "package-mac-x64": "rimraf dist && npm run rebuild-usb-x64 && npm run build-mac-x64 && npm run sign-mac -- x64 && npm run notarize-mac -- x64 && npm run create-pkg -- x64 && npm run sign-pkg -- x64 && npm run notarize-pkg -- x64 && node scripts/zip-and-move.js",
+    "package-mac-arm64": "rimraf dist && npm run rebuild-usb-arm64 && npm run build-mac-arm64 && npm run sign-mac -- arm64 && npm run notarize-mac -- arm64 && npm run create-pkg -- arm64 && npm run sign-pkg -- arm64 && npm run notarize-pkg -- arm64 && node scripts/zip-and-move.js",
     "package-mac:all": "npm run package-mac-x64 && npm run package-mac-arm64",
     "sign-win": "node windows/sign-windows.js",
     "build-win-x64": "npm run build:cli && node scripts/build-pkg.js win-x64",
-    "package-win-x64": "rimraf dist && npm run rebuild-usb-detection-x64 && npm run build-win-x64 && npm run sign-win -- x64 && node scripts/zip-and-move.js",
+    "package-win-x64": "rimraf dist && npm run rebuild-usb-x64 && npm run build-win-x64 && npm run sign-win -- x64 && node scripts/zip-and-move.js",
     "package-win:all": "npm run package-win-x64",
-    "rebuild-usb-detection-x64": "npm rebuild usb-detection --target=18.0.0 --arch=x64 --dist-url=https://nodejs.org/dist",
-    "rebuild-usb-detection-arm64": "npm rebuild usb-detection --target=18.0.0 --arch=arm64 --dist-url=https://nodejs.org/dist",
+    "rebuild-usb-x64": "npm rebuild usb --target=18.0.0 --arch=x64 --dist-url=https://nodejs.org/dist",
+    "rebuild-usb-arm64": "npm rebuild usb --target=18.0.0 --arch=arm64 --dist-url=https://nodejs.org/dist",
     "prepublish": "npm run build",
     "prepublishOnly": "npm run build",
     "test": "echo \"Warning: no test specified\" && exit 0",
@@ -78,7 +78,7 @@
   },
   "peerDependencies": {
     "node-hid": "^3.2.0",
-    "usb-detection": "^4.14.2"
+    "usb": "^2.16.0"
   },
   "devDependencies": {
     "@types/archiver": "^5.3.2",

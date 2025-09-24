@@ -59,14 +59,14 @@ For full functionality including USB and HID device detection, you need to insta
 npm install kensington-konnect-diagnostics-cli-tool
 
 # Install native dependencies for full functionality
-npm install node-hid usb-detection
+npm install node-hid usb
 
 # Or install everything at once
-npm install kensington-konnect-diagnostics-cli-tool node-hid usb-detection
+npm install kensington-konnect-diagnostics-cli-tool node-hid usb
 ```
 
 **Important Notes**: 
-- Native dependencies (`node-hid`, `usb-detection`) are **peer dependencies**
+- Native dependencies (`node-hid`, `usb`) are **peer dependencies**
 - You need to install them separately for full functionality
 - The tool will work without them but with limited device detection capabilities
 - If native modules are not available, you'll see warnings but the tool will continue to work
@@ -89,7 +89,7 @@ Some native dependencies may require additional system dependencies:
 - Python 2.7 or 3.x
 - libudev-dev (for USB devices)
 
-If you encounter compilation errors, please refer to the [node-hid](https://github.com/node-hid/node-hid) and [usb-detection](https://github.com/MadLittleMods/node-usb-detection) documentation for detailed installation instructions.
+If you encounter compilation errors, please refer to the [node-hid](https://github.com/node-hid/node-hid) and [node-usb](https://github.com/node-usb/node-usb) documentation for detailed installation instructions.
 
 ## Usage
 
@@ -201,7 +201,7 @@ logtool/
 - **Module Formats**: CommonJS, ES Modules
 - **Main Dependencies**:
   - `systeminformation` - System information collection
-  - `usb-detection` - USB device detection
+  - `usb` (node-usb) - USB device detection
   - `node-hid` - HID device detection
   - `archiver` - ZIP file compression
   - `yargs` - CLI argument parsing

@@ -18,7 +18,7 @@ const libraryConfigs = {
     format: 'cjs',
     sourcemap: true,
     bundle: true,
-    external: ['node-hid', 'usb-detection'],
+    external: ['node-hid', 'usb'],
     define: {
       'process.env.BUILD_VERSION': `"${version}"`
     }
@@ -33,7 +33,7 @@ const libraryConfigs = {
     format: 'esm',
     sourcemap: true,
     bundle: true,
-    external: ['node-hid', 'usb-detection'],
+    external: ['node-hid', 'usb'],
     define: {
       'process.env.BUILD_VERSION': `"${version}"`
     }
