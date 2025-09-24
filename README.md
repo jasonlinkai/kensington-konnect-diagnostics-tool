@@ -235,6 +235,118 @@ interface DiagnosticsOptions {
 }
 ```
 
+## Release Management
+
+### Prerequisites for Publishing
+- npm account with publish permissions
+- Git repository with clean working directory
+- All tests passing
+
+### Publishing to npm
+
+#### Quick Publish
+```bash
+# Build and publish to npm
+npm run publish:npm
+```
+
+#### Version-based Publishing
+```bash
+# Patch version (1.0.1 → 1.0.2) - Bug fixes
+npm run publish:patch
+
+# Minor version (1.0.1 → 1.1.0) - New features
+npm run publish:minor
+
+# Major version (1.0.1 → 2.0.0) - Breaking changes
+npm run publish:major
+```
+
+#### Pre-release Versions
+```bash
+# Beta version (1.0.1 → 1.0.2-beta.0)
+npm run publish:beta
+
+# Alpha version (1.0.1 → 1.0.2-alpha.0)
+npm run publish:alpha
+```
+
+### Release Process
+
+1. **Prepare for Release**
+   ```bash
+   # Ensure all changes are committed
+   git status
+   
+   # Run tests (if available)
+   npm test
+   
+   # Build the project
+   npm run build
+   ```
+
+2. **Choose Release Type**
+   - **Patch**: Bug fixes, small improvements
+   - **Minor**: New features, backward compatible
+   - **Major**: Breaking changes, major updates
+   - **Pre-release**: Beta/Alpha for testing
+
+3. **Execute Release**
+   ```bash
+   # Example: Release a minor version
+   npm run publish:minor
+   ```
+
+4. **Verify Release**
+   ```bash
+   # Check npm registry
+   npm view kensington-konnect-diagnostics-tool version
+   
+   # Test installation
+   npm install kensington-konnect-diagnostics-tool@latest
+   ```
+
+### Release Scripts Explained
+
+| Script | Description | Version Change | Use Case |
+|--------|-------------|---------------|----------|
+| `publish:npm` | Build and publish current version | None | Manual publish |
+| `publish:patch` | Auto-increment patch + publish | 1.0.1 → 1.0.2 | Bug fixes |
+| `publish:minor` | Auto-increment minor + publish | 1.0.1 → 1.1.0 | New features |
+| `publish:major` | Auto-increment major + publish | 1.0.1 → 2.0.0 | Breaking changes |
+| `publish:beta` | Create beta pre-release | 1.0.1 → 1.0.2-beta.0 | Testing |
+| `publish:alpha` | Create alpha pre-release | 1.0.1 → 1.0.2-alpha.0 | Early testing |
+
+### Pre-release Installation
+```bash
+# Install beta version
+npm install kensington-konnect-diagnostics-tool@beta
+
+# Install alpha version
+npm install kensington-konnect-diagnostics-tool@alpha
+
+# Install specific version
+npm install kensington-konnect-diagnostics-tool@1.0.2-beta.0
+```
+
+### Git Integration
+All release scripts automatically:
+- ✅ Update version in `package.json`
+- ✅ Create Git tag with version number
+- ✅ Commit version changes
+- ✅ Build the project
+- ✅ Publish to npm registry
+
+### Rollback (if needed)
+```bash
+# Unpublish a version (within 24 hours)
+npm unpublish kensington-konnect-diagnostics-tool@1.0.2
+
+# Revert Git tag
+git tag -d v1.0.2
+git push origin :refs/tags/v1.0.2
+```
+
 ## Development
 
 ### Prerequisites

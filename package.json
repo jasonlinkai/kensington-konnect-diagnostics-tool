@@ -44,7 +44,15 @@
     "package-win-x64": "rimraf dist && npm run rebuild-usb-detection-x64 && npm run build-win-x64 && npm run sign-win -- x64 && node scripts/zip-and-move.js",
     "package-win:all": "npm run package-win-x64",
     "rebuild-usb-detection-x64": "npm rebuild usb-detection --target=18.0.0 --arch=x64 --dist-url=https://nodejs.org/dist",
-    "rebuild-usb-detection-arm64": "npm rebuild usb-detection --target=18.0.0 --arch=arm64 --dist-url=https://nodejs.org/dist"
+    "rebuild-usb-detection-arm64": "npm rebuild usb-detection --target=18.0.0 --arch=arm64 --dist-url=https://nodejs.org/dist",
+    "prepublish": "npm run build",
+    "prepublishOnly": "npm run build && npm test",
+    "publish:npm": "npm run build && npm publish",
+    "publish:patch": "npm version patch && npm run publish:npm",
+    "publish:minor": "npm version minor && npm run publish:npm",
+    "publish:major": "npm version major && npm run publish:npm",
+    "publish:beta": "npm version prerelease --preid=beta && npm publish --tag beta",
+    "publish:alpha": "npm version prerelease --preid=alpha && npm publish --tag alpha"
   },
   "keywords": [
     "cli",
@@ -95,12 +103,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/jasonlinkai/logtool.git"
+    "url": "https://github.com/jasonlinkai/kensington-konnect-diagnostics-tool.git"
   },
   "bugs": {
-    "url": "https://github.com/jasonlinkai/logtool/issues"
+    "url": "https://github.com/jasonlinkai/kensington-konnect-diagnostics-tool/issues"
   },
-  "homepage": "https://github.com/jasonlinkai/logtool#readme",
+  "homepage": "https://github.com/jasonlinkai/kensington-konnect-diagnostics-tool#readme",
   "files": [
     "dist/",
     "libs/",
