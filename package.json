@@ -1,6 +1,6 @@
 {
   "name": "kensington-konnect-diagnostics-cli-tool",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Kensington Konnect Diagnostics Tool - Cross-platform CLI tool and Node.js library to collect system logs and device information",
   "main": "libs/index.cjs",
   "module": "libs/index.esm.js",
