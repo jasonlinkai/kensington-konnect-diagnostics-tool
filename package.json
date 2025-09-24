@@ -1,0 +1,111 @@
+{
+  "name": "kensington-konnect-diagnostics-tool",
+  "version": "1.0.1",
+  "description": "Kensington Konnect Diagnostics Tool - Cross-platform CLI tool and Node.js library to collect system logs and device information",
+  "main": "libs/index.cjs",
+  "module": "libs/index.esm.js",
+  "types": "libs/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./libs/index.d.ts",
+      "import": "./libs/index.esm.js",
+      "require": "./libs/index.cjs"
+    },
+    "./cjs": {
+      "types": "./libs/index.d.ts",
+      "require": "./libs/index.cjs"
+    },
+    "./esm": {
+      "types": "./libs/index.d.ts",
+      "import": "./libs/index.esm.js"
+    }
+  },
+  "bin": {
+    "kensington-konnect-diagnostics": "./dist/index.js"
+  },
+  "scripts": {
+    "build:cli": "node ./scripts/build-cli.js",
+    "build:libs": "node ./scripts/build-libs.js",
+    "build": "npm run build:cli && npm run build:libs",
+    "start": "node dist/index.js",
+    "dev": "ts-node src/index.ts",
+    "sign-mac": "node mac/sign-macos.js",
+    "notarize-mac": "node mac/notarize-macos.js",
+    "build-mac-x64": "npm run build:cli && node scripts/build-pkg.js macos-x64",
+    "build-mac-arm64": "npm run build:cli && node scripts/build-pkg.js macos-arm64",
+    "create-pkg": "node scripts/create-pkg.js",
+    "sign-pkg": "node scripts/sign-pkg.js",
+    "notarize-pkg": "node scripts/notarize-pkg.js",
+    "package-mac-x64": "rimraf dist && npm run rebuild-usb-detection-x64 && npm run build-mac-x64 && npm run sign-mac -- x64 && npm run notarize-mac -- x64 && npm run create-pkg -- x64 && npm run sign-pkg -- x64 && npm run notarize-pkg -- x64 && node scripts/zip-and-move.js",
+    "package-mac-arm64": "rimraf dist && npm run rebuild-usb-detection-arm64 && npm run build-mac-arm64 && npm run sign-mac -- arm64 && npm run notarize-mac -- arm64 && npm run create-pkg -- arm64 && npm run sign-pkg -- arm64 && npm run notarize-pkg -- arm64 && node scripts/zip-and-move.js",
+    "package-mac:all": "npm run package-mac-x64 && npm run package-mac-arm64",
+    "sign-win": "node windows/sign-windows.js",
+    "build-win-x64": "npm run build:cli && node scripts/build-pkg.js win-x64",
+    "package-win-x64": "rimraf dist && npm run rebuild-usb-detection-x64 && npm run build-win-x64 && npm run sign-win -- x64 && node scripts/zip-and-move.js",
+    "package-win:all": "npm run package-win-x64",
+    "rebuild-usb-detection-x64": "npm rebuild usb-detection --target=18.0.0 --arch=x64 --dist-url=https://nodejs.org/dist",
+    "rebuild-usb-detection-arm64": "npm rebuild usb-detection --target=18.0.0 --arch=arm64 --dist-url=https://nodejs.org/dist"
+  },
+  "keywords": [
+    "cli",
+    "logs",
+    "system-info",
+    "usb-devices",
+    "cross-platform",
+    "diagnostics",
+    "kensington",
+    "device-detection",
+    "system-monitoring",
+    "usb",
+    "bluetooth",
+    "input-devices"
+  ],
+  "author": "JackyLin <loveguitar668@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "archiver": "^5.3.1",
+    "dotenv": "^17.2.0",
+    "systeminformation": "^5.9.13"
+  },
+  "peerDependencies": {
+    "node-hid": "^3.2.0",
+    "usb-detection": "^4.12.0"
+  },
+  "peerDependenciesMeta": {
+    "node-hid": {
+      "optional": true
+    },
+    "usb-detection": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@types/archiver": "^5.3.2",
+    "@types/node": "^18.15.0",
+    "esbuild": "^0.25.9",
+    "fs-extra": "^11.1.1",
+    "pkg": "^5.8.1",
+    "rimraf": "^5.0.10",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.9.5",
+    "yargs": "^17.7.2"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jasonlinkai/logtool.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jasonlinkai/logtool/issues"
+  },
+  "homepage": "https://github.com/jasonlinkai/logtool#readme",
+  "files": [
+    "dist/",
+    "libs/",
+    "src/",
+    "README.md",
+    "LICENSE"
+  ]
+}
