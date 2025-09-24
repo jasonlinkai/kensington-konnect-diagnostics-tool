@@ -1,6 +1,7 @@
 const esbuild = require('esbuild');
 const fs = require('fs');
 const path = require('path');
+const { execSync } = require('child_process');
 
 // Read version from package.json
 const packageJson = require('../package.json');
@@ -39,6 +40,55 @@ const libraryConfigs = {
   }
 };
 
+// Generate TypeScript declaration files
+function generateTypeDeclarations() {
+  console.log('  📝 Generating TypeScript declaration files...');
+  
+  try {
+    // Create a custom tsconfig for libs build
+    const libsTsConfig = {
+      compilerOptions: {
+        target: "ES2020",
+        module: "commonjs",
+        lib: ["ES2020", "DOM"],
+        outDir: "./libs",
+        rootDir: "./src",
+        strict: true,
+        esModuleInterop: true,
+        skipLibCheck: true,
+        forceConsistentCasingInFileNames: true,
+        resolveJsonModule: true,
+        declaration: true,
+        declarationMap: true,
+        emitDeclarationOnly: true,
+        removeComments: false,
+        noImplicitAny: true,
+        noImplicitReturns: true,
+        noFallthroughCasesInSwitch: true,
+        noUncheckedIndexedAccess: true,
+        types: ["node"]
+      },
+      include: ["src/**/*"],
+      exclude: ["node_modules", "dist"]
+    };
+    
+    // Write temporary tsconfig for libs
+    const tempTsConfigPath = 'tsconfig.libs.json';
+    fs.writeFileSync(tempTsConfigPath, JSON.stringify(libsTsConfig, null, 2));
+    
+    // Run TypeScript compiler to generate declaration files
+    execSync(`npx tsc --project ${tempTsConfigPath}`, { stdio: 'inherit' });
+    
+    // Clean up temp config
+    fs.unlinkSync(tempTsConfigPath);
+    
+    return true;
+  } catch (error) {
+    console.error('❌ Failed to generate TypeScript declarations:', error.message);
+    return false;
+  }
+}
+
 // Build function for libraries
 async function buildLibs() {
   try {
@@ -60,6 +110,12 @@ async function buildLibs() {
     console.log('  📦 Building ES Modules (ESM)...');
     await esbuild.build(libraryConfigs.esm);
     outputFiles.push('ESM: libs/index.esm.js');
+    
+    // Generate TypeScript declaration files
+    const declarationsGenerated = generateTypeDeclarations();
+    if (declarationsGenerated) {
+      outputFiles.push('Types: libs/index.d.ts');
+    }
     
     console.log('✅ Library build completed successfully');
     console.log('📁 Output files:');
