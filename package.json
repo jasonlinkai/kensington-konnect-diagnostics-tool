@@ -1,5 +1,5 @@
 {
-  "name": "kensington-konnect-diagnostics-tool",
+  "name": "kensington-konnect-diagnostics-cli-tool",
   "version": "1.0.2",
   "description": "Kensington Konnect Diagnostics Tool - Cross-platform CLI tool and Node.js library to collect system logs and device information",
   "main": "libs/index.cjs",
@@ -96,12 +96,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/jasonlinkai/kensington-konnect-diagnostics-tool.git"
+    "url": "https://github.com/jasonlinkai/kensington-konnect-diagnostics-cli-tool.git"
   },
   "bugs": {
-    "url": "https://github.com/jasonlinkai/kensington-konnect-diagnostics-tool/issues"
+    "url": "https://github.com/jasonlinkai/kensington-konnect-diagnostics-cli-tool/issues"
   },
-  "homepage": "https://github.com/jasonlinkai/kensington-konnect-diagnostics-tool#readme",
+  "homepage": "https://github.com/jasonlinkai/kensington-konnect-diagnostics-cli-tool#readme",
   "files": [
     "dist/",
     "libs/",

@@ -47,7 +47,7 @@ npm run start
 ## Installation
 
 ```bash
-npm install kensington-konnect-diagnostics-tool
+npm install kensington-konnect-diagnostics-cli-tool
 ```
 
 ### Native Dependencies (Optional)
@@ -56,13 +56,13 @@ For full functionality including USB and HID device detection, you need to insta
 
 ```bash
 # Basic installation (works without native modules)
-npm install kensington-konnect-diagnostics-tool
+npm install kensington-konnect-diagnostics-cli-tool
 
 # Install native dependencies for full functionality
 npm install node-hid usb-detection
 
 # Or install everything at once
-npm install kensington-konnect-diagnostics-tool node-hid usb-detection
+npm install kensington-konnect-diagnostics-cli-tool node-hid usb-detection
 ```
 
 **Important Notes**: 
@@ -99,7 +99,7 @@ If you encounter compilation errors, please refer to the [node-hid](https://gith
 node dist/index.js
 
 # Or install globally
-npm install -g kensington-konnect-diagnostics-tool
+npm install -g kensington-konnect-diagnostics-cli-tool
 kensington-konnect-diagnostics
 ```
 
@@ -107,7 +107,7 @@ kensington-konnect-diagnostics
 
 #### CommonJS
 ```javascript
-const { runDiagnostics } = require('kensington-konnect-diagnostics-tool');
+const { runDiagnostics } = require('kensington-konnect-diagnostics-cli-tool');
 
 async function example() {
   const result = await runDiagnostics({
@@ -123,7 +123,7 @@ async function example() {
 
 #### ES Modules
 ```javascript
-import { runDiagnostics } from 'kensington-konnect-diagnostics-tool';
+import { runDiagnostics } from 'kensington-konnect-diagnostics-cli-tool';
 
 const result = await runDiagnostics();
 ```
@@ -300,10 +300,10 @@ npm run publish:alpha
 4. **Verify Release**
    ```bash
    # Check npm registry
-   npm view kensington-konnect-diagnostics-tool version
+   npm view kensington-konnect-diagnostics-cli-tool version
    
    # Test installation
-   npm install kensington-konnect-diagnostics-tool@latest
+   npm install kensington-konnect-diagnostics-cli-tool@latest
    ```
 
 ### Release Scripts Explained
@@ -320,13 +320,13 @@ npm run publish:alpha
 ### Pre-release Installation
 ```bash
 # Install beta version
-npm install kensington-konnect-diagnostics-tool@beta
+npm install kensington-konnect-diagnostics-cli-tool@beta
 
 # Install alpha version
-npm install kensington-konnect-diagnostics-tool@alpha
+npm install kensington-konnect-diagnostics-cli-tool@alpha
 
 # Install specific version
-npm install kensington-konnect-diagnostics-tool@1.0.2-beta.0
+npm install kensington-konnect-diagnostics-cli-tool@1.0.2-beta.0
 ```
 
 ### Git Integration
@@ -340,7 +340,7 @@ All release scripts automatically:
 ### Rollback (if needed)
 ```bash
 # Unpublish a version (within 24 hours)
-npm unpublish kensington-konnect-diagnostics-tool@1.0.2
+npm unpublish kensington-konnect-diagnostics-cli-tool@1.0.2
 
 # Revert Git tag
 git tag -d v1.0.2
