@@ -157,7 +157,28 @@ After building libraries, the `libs/` directory will contain:
 - `index.esm.js` - ES Modules format
 
 ### Generated Reports
-After running the tool, a `kensington-konnect-diagnostics-{version}-{timestamp}.zip` file will be generated in the Documents folder.
+
+The tool generates diagnostic reports in different locations depending on how it's used:
+
+#### As CLI Tool
+- **Output Location**: System Documents folder
+- **File Format**: `kensington-konnect-diagnostics-{version}-{timestamp}.zip`
+- **Example**: `~/Documents/kensington-konnect-diagnostics-1.0.5-2025-09-25T13-30-45.zip`
+
+#### As Node.js Library
+- **Default Location**: System Documents folder (same as CLI)
+- **Custom Location**: Use `zipOutputPath` option to specify custom output path
+- **Example**:
+  ```javascript
+  const result = await runDiagnostics({
+    zipOutputPath: '/path/to/custom/output/diagnostics.zip'
+  });
+  ```
+
+#### As Executable File
+- **Output Location**: Next to the executable file
+- **File Format**: `kensington-konnect-diagnostics-{version}-{timestamp}.zip`
+- **Example**: If executable is in `/Applications/`, report will be in `/Applications/`
 
 ### macOS Distribution Notes
 
