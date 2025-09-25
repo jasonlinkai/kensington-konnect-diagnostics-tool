@@ -1,11 +1,14 @@
-const esbuild = require('esbuild');
+#!/usr/bin/env node
+
 const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
+const esbuild = require('esbuild');
 
-// Read version from package.json
-const packageJson = require('../package.json');
-const version = packageJson.version;
+// Get version information
+const { getVersion } = require('./getVersion');
+const versionInfo = getVersion();
+const version = versionInfo.version;
 
 // Build configurations for different module formats
 const libraryConfigs = {
@@ -127,9 +130,13 @@ async function buildLibs() {
   }
 }
 
-// Run build if this script is executed directly
+// Main function
+async function main() {
+  await buildLibs();
+}
+
 if (require.main === module) {
-  buildLibs();
+  main();
 }
 
 module.exports = { buildLibs, libraryConfigs };

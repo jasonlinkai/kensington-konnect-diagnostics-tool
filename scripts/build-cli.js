@@ -1,11 +1,14 @@
-const esbuild = require('esbuild');
-const path = require('path');
+#!/usr/bin/env node
+
 const fs = require('fs');
+const path = require('path');
+const esbuild = require('esbuild');
 const glob = require('glob');
 
-// Read version from package.json
-const packageJson = require('../package.json');
-const version = packageJson.version;
+// Get version information
+const { getVersion } = require('./getVersion');
+const versionInfo = getVersion();
+const version = versionInfo.version;
 
 // Build configuration for CLI (with shebang)
 const cliConfig = {
@@ -24,7 +27,7 @@ const cliConfig = {
 };
 
 // Build function for CLI only
-async function build() {
+async function buildCLI() {
   try {
     console.log(`🛠️ Building CLI with esbuild (version: ${version})...`);
     
@@ -44,9 +47,13 @@ async function build() {
   }
 }
 
-// Run build if this script is executed directly
-if (require.main === module) {
-  build();
+// Main function
+async function main() {
+  await buildCLI();
 }
 
-module.exports = { build, cliConfig };
+if (require.main === module) {
+  main();
+}
+
+module.exports = { buildCLI, cliConfig };

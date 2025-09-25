@@ -132,10 +132,34 @@ export async function runDiagnostics(options: DiagnosticsOptions = {}): Promise<
     // Create zip if requested
     if (createZip) {
       console.log('📦 Creating ZIP archive...');
-      const documentsDir = path.join(os.homedir(), 'Documents');
+      
+      let outputDir;
+      if (zipOutputPath) {
+        outputDir = path.dirname(zipOutputPath);
+      } else {
+        // Check if running as packaged executable (.app, .exe, etc.) or CLI
+        const isPackaged = !process.stdin.isTTY || process.env.PKG_EXECPATH;
+        if (isPackaged) {
+          const appPath = process.execPath;
+          const os = require('os');
+          
+          if (os.platform() === 'darwin') {
+            // macOS .app - go up from Contents/MacOS to .app parent (one more level up)
+            const appDir = path.dirname(path.dirname(path.dirname(path.dirname(appPath))));
+            outputDir = appDir;
+          } else {
+            // Windows .exe or other platforms - save next to the executable
+            outputDir = path.dirname(appPath);
+          }
+        } else {
+          // Running as CLI (node script) - use Documents directory
+          outputDir = path.join(os.homedir(), 'Documents');
+        }
+      }
+      
       const now = new Date();
       const utcTime = now.toISOString().replace(/[:.]/g, '-').slice(0, 19);
-      const zipPath = zipOutputPath || path.join(documentsDir, `kensington-konnect-diagnostics-${version.split('.').join('_')}-${utcTime}.zip`);
+      const zipPath = zipOutputPath || path.join(outputDir, `kensington-konnect-diagnostics-${version.split('.').join('_')}-${utcTime}.zip`);
       
       await createZipArchive(tempDir, zipPath);
       finalOutputPath = zipPath;
@@ -201,6 +225,53 @@ export async function collectCrashReportsData(outputDir: string) {
 export { createZipArchive } from './utils/zipUtils';
 export { errorLogger } from './utils/errorLogger';
 
+// Helper function to show system notification (simplified version)
+function showSystemNotification(title: string, message: string) {
+  try {
+    const os = require('os');
+    
+    if (os.platform() === 'darwin') {
+      // macOS - use terminal-notifier if available, otherwise skip
+      const { exec } = require('child_process');
+      exec(`which terminal-notifier`, (error: any) => {
+        if (!error) {
+          exec(`terminal-notifier -title "${title}" -message "${message}"`);
+        }
+        // If terminal-notifier is not available, just skip notification
+      });
+    }
+    // For other platforms, skip notification to avoid permission issues
+  } catch (error) {
+    // Silently fail - no notification is better than permission errors
+  }
+}
+
+// Helper function to show dialog (macOS only for now)
+function showDialog(title: string, message: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    try {
+      const { exec } = require('child_process');
+      const os = require('os');
+      
+      if (os.platform() === 'darwin') {
+        exec(`osascript -e 'display dialog "${message}" with title "${title}" buttons {"OK"} default button "OK"'`, (error: any, stdout: any, stderr: any) => {
+          if (error) {
+            console.log('Dialog system not available:', error.message);
+            resolve(); // Continue even if dialog fails
+          } else {
+            resolve();
+          }
+        });
+      } else {
+        resolve();
+      }
+    } catch (error) {
+      console.log('Dialog system not available');
+      resolve();
+    }
+  });
+}
+
 // CLI main function (original functionality)
 async function main() {
   try {
@@ -228,27 +299,45 @@ async function main() {
       console.log('📁 Log file location:');
       console.log(`   ${result.outputPath}`);
       console.log('🎉 ============================================');
-      console.log('\n👋 Press any key to exit...');
       
-      // Wait for user input before closing
-      process.stdin.setRawMode(true);
-      process.stdin.resume();
-      process.stdin.on('data', () => {
+      // Check if running as .app (no TTY available)
+      const isApp = !process.stdin.isTTY;
+      
+      if (isApp) {
+        // Running as .app - just exit cleanly
+        // The console output above already shows the completion message
         process.exit(0);
-      });
+      } else {
+        // Running as CLI - wait for user input
+        console.log('\n👋 Press any key to exit...');
+        process.stdin.setRawMode(true);
+        process.stdin.resume();
+        process.stdin.on('data', () => {
+          process.exit(0);
+        });
+      }
     } else {
       throw new Error(result.error);
     }
   } catch (error: any) {
     console.error('❌ Error:', error.message);
-    console.log('\n👋 Press any key to exit...');
     
-    // Wait for user input before closing
-    process.stdin.setRawMode(true);
-    process.stdin.resume();
-    process.stdin.on('data', () => {
+    // Check if running as .app
+    const isApp = !process.stdin.isTTY;
+    
+    if (isApp) {
+      // Running as .app - just exit cleanly
+      // The console output above already shows the error message
       process.exit(1);
-    });
+    } else {
+      // Running as CLI - wait for user input
+      console.log('\n👋 Press any key to exit...');
+      process.stdin.setRawMode(true);
+      process.stdin.resume();
+      process.stdin.on('data', () => {
+        process.exit(1);
+      });
+    }
   }
 }
 

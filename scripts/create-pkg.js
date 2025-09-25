@@ -7,12 +7,13 @@ const yargs = require('yargs/yargs');
 const { hideBin } = require('yargs/helpers');
 require('dotenv').config();
 
+// Get version information
+const { getVersion } = require('./getVersion');
+const versionInfo = getVersion();
+const version = versionInfo.versionUnderscore;
+
 // Get architecture from command line arguments
 const arch = process.argv[2];
-
-// Read version from package.json
-const packageJson = require('../package.json');
-const version = packageJson.version.split('.').join('_');
 
 // Parse command line arguments
 const argv = yargs(hideBin(process.argv))
@@ -36,7 +37,7 @@ const CONFIG = {
   OUTPUT_PKG: argv.output,
   TEMP_DIR: `/tmp/pkg_build_${arch}_${Date.now()}`,
   BUNDLE_ID: process.env.BUNDLE_ID,
-  PKG_VERSION: packageJson.version,
+  PKG_VERSION: versionInfo.version,
   INSTALL_LOCATION: '/Applications/Utilities'
 };
 
@@ -67,7 +68,7 @@ function spawnPromisify(name, command, args, options = {}) {
   });
 }
 
-async function createPKG() {
+async function createPkg() {
   try {
     // Check if executable exists
     if (!fs.existsSync(CONFIG.EXECUTABLE_PATH)) {
@@ -128,11 +129,11 @@ async function createPKG() {
 
 // Main function
 async function main() {
-  await createPKG();
+  await createPkg();
 }
 
 if (require.main === module) {
   main();
 }
 
-module.exports = { createPKG, CONFIG };
+module.exports = { createPkg, CONFIG };

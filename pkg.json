@@ -1,5 +1,10 @@
 {
   "assets": [
-    "node_modules/usb/prebuilds/**/*.node"
+    "node_modules/usb/prebuilds/**/*.node",
+    "node_modules/usb/build/**/*.node",
+    "node_modules/usb/lib/**/*.js"
+  ],
+  "scripts": [
+    "dist/**/*.js"
   ]
 }

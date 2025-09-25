@@ -27,52 +27,15 @@ export async function collectUsbDevices(): Promise<UsbDevice[]> {
     
     devices = rawDevices.map((dev: any) => {
       const descriptor = dev.deviceDescriptor;
-      let deviceName = '';
-      let manufacturer = '';
-      let serialNumber = '';
       
-      try {
-        // Try to open device to get string descriptors
-        dev.open();
-        
-        // Get product name if available
-        if (descriptor.iProduct) {
-          try {
-            deviceName = dev.getStringDescriptor(descriptor.iProduct);
-          } catch (e) {
-            // Ignore errors getting string descriptors
-          }
-        }
-        
-        // Get manufacturer if available
-        if (descriptor.iManufacturer) {
-          try {
-            manufacturer = dev.getStringDescriptor(descriptor.iManufacturer);
-          } catch (e) {
-            // Ignore errors getting string descriptors
-          }
-        }
-        
-        // Get serial number if available
-        if (descriptor.iSerialNumber) {
-          try {
-            serialNumber = dev.getStringDescriptor(descriptor.iSerialNumber);
-          } catch (e) {
-            // Ignore errors getting string descriptors
-          }
-        }
-        
-        dev.close();
-      } catch (e) {
-        // If we can't open the device, just use what we have from the descriptor
-      }
-      
+      // Skip trying to get string descriptors to avoid callback issues
+      // Just use the basic descriptor information
       return {
         vendorId: descriptor.idVendor?.toString(16).padStart(4, '0') || '',
         productId: descriptor.idProduct?.toString(16).padStart(4, '0') || '',
-        deviceName: deviceName || '',
-        manufacturer: manufacturer || '',
-        serialNumber: serialNumber || '',
+        deviceName: '', // Skip string descriptors to avoid callback issues
+        manufacturer: '', // Skip string descriptors to avoid callback issues
+        serialNumber: '', // Skip string descriptors to avoid callback issues
         locationId: dev.busNumber?.toString() + '-' + dev.deviceAddress?.toString() || '',
         deviceAddress: dev.deviceAddress,
         connected: true
