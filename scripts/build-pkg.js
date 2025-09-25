@@ -3,6 +3,7 @@
 const { execSync } = require('child_process');
 const path = require('path');
 const fs = require('fs');
+const rcedit = require('rcedit');
 
 // Parse command line arguments
 const args = process.argv.slice(2);
@@ -67,6 +68,27 @@ try {
   
   console.log('✅ Build completed successfully!');
   console.log(`📁 Output file: ${outputPath}`);
+  
+  // For Windows builds, apply custom icon
+  if (target === 'win-x64') {
+    const iconPath = path.join(__dirname, '..', 'resources', 'appIcon.ico');
+    
+    if (fs.existsSync(iconPath)) {
+      console.log('🎨 Applying custom icon...');
+      try {
+        rcedit(outputPath, {
+          icon: iconPath
+        });
+        console.log('✅ Custom icon applied successfully!');
+      } catch (iconError) {
+        console.warn('⚠️  Warning: Failed to apply custom icon:', iconError.message);
+        console.log('   The executable was built successfully, but with default icon.');
+      }
+    } else {
+      console.warn('⚠️  Warning: Icon file not found at:', iconPath);
+      console.log('   The executable was built successfully, but with default icon.');
+    }
+  }
   
 } catch (error) {
   console.error('❌ Build failed:', error.message);
