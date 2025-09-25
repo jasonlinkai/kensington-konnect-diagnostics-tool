@@ -45,7 +45,7 @@
     "package-mac-app:all": "npm run package-mac-app-x64 && npm run package-mac-app-arm64",
     "sign-win": "node windows/sign-windows.js",
     "build-win-x64": "npm run build:cli && node scripts/build-pkg.js win-x64",
-    "package-win-x64": "rimraf dist && npm run rebuild-usb-x64 && npm run build-win-x64 && npm run sign-win -- x64 && node scripts/zip-and-move.js -- --os win --arch x64 --extension exe",
+    "package-win-x64": "rimraf dist && npm run rebuild-usb-x64 && npm run build-win-x64 && npm run sign-win -- x64 && node scripts/zip-and-move.js --os win --arch x64 --extension exe",
     "package-win:all": "npm run package-win-x64",
     "rebuild-usb-x64": "npm rebuild usb --target=18.0.0 --arch=x64 --dist-url=https://nodejs.org/dist",
     "rebuild-usb-arm64": "npm rebuild usb --target=18.0.0 --arch=arm64 --dist-url=https://nodejs.org/dist"
